@@ -10,7 +10,7 @@ import json
 app = Flask(__name__)
 app.secret_key = os.getenv("API_KEY")  # Clave para sesiones
 
-# Configuración de proxy (Si tienes uno, agrégalo aquí)
+# Configuración de proxy (Si usas proxy, agrégalo aquí)
 PROXY = ""
 
 # Variables globales
@@ -18,25 +18,24 @@ cliente = None
 usuarios = []
 mensajes = []
 usuarios_enviados = set()
-MENSAJES_POR_RONDA = 10  # Reducido para evitar bloqueos
+MENSAJES_POR_RONDA = 5  # Reducido para evitar bloqueos
 TIEMPO_ENTRE_MENSAJES = random.randint(300, 600)  # 5 a 10 minutos entre mensajes
 TIEMPO_ENTRE_RONDAS = 3600  # 1 hora entre rondas
-SESSION_FILE = "session.json"  # Guardado de sesión
+SESSION_FILE = "session.json"
 MENSAJES_FILE = "mensajes.txt"
 DATA_FILE = "data.json"
-BASE_CONOCIMIENTO_FILE = "base_conocimiento.txt"
 
 # Configuración de OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Ruta principal: formulario para ingresar credenciales
+# Ruta principal
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         session["username"] = request.form["username"]
         session["password"] = request.form["password"]
 
-        # Guardar archivos cargados
+        # Cargar archivos
         if "mensajes_file" in request.files:
             mensajes_file = request.files["mensajes_file"]
             if mensajes_file.filename:
@@ -60,7 +59,6 @@ def index():
 
     return render_template("index.html")
 
-# Ruta para verificación de 2FA
 @app.route("/verificacion_2fa", methods=["GET", "POST"])
 def verificacion_2fa():
     if request.method == "POST":
@@ -71,11 +69,10 @@ def verificacion_2fa():
         if cliente:
             return redirect(url_for("inicio_exitoso"))
         else:
-            return "Error al verificar el código de 2FA."
+            return "Error en el código de 2FA."
 
     return render_template("verificacion_2fa.html")
 
-# Ruta para inicio de sesión exitoso
 @app.route("/inicio_exitoso")
 def inicio_exitoso():
     global cliente, usuarios, mensajes
@@ -92,19 +89,18 @@ def inicio_exitoso():
 
     print(f"✅ Se cargaron {len(usuarios)} usuarios y {len(mensajes)} mensajes.")
 
-    # Iniciar el programador de tareas en un hilo separado
+    # Iniciar el proceso de envío de mensajes en un hilo separado
     threading.Thread(target=programar_tareas, daemon=True).start()
 
-    return "Inicio de sesión exitoso. El script está enviando mensajes."
+    return "Inicio de sesión exitoso. El bot está enviando mensajes."
 
-# Función para iniciar sesión en Instagram
+# Iniciar sesión en Instagram
 def iniciar_sesion(username, password, codigo_2fa=None):
     cl = Client()
 
     if PROXY:
-        cl.set_proxy(PROXY)  
+        cl.set_proxy(PROXY)
 
-    # Intentar cargar sesión guardada
     if os.path.exists(SESSION_FILE):
         try:
             cl.load_settings(SESSION_FILE)
@@ -127,7 +123,7 @@ def iniciar_sesion(username, password, codigo_2fa=None):
         print(f"⚠️ Error al iniciar sesión: {e}")
         return None
 
-# Función para cargar usuarios dinámicamente desde `data.json`
+# Cargar usuarios desde `data.json`
 def cargar_usuarios():
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -136,7 +132,7 @@ def cargar_usuarios():
         print(f"⚠️ Error al cargar usuarios: {e}")
         return []
 
-# Función para cargar mensajes dinámicamente desde `mensajes.txt`
+# Cargar mensajes desde `mensajes.txt`
 def cargar_mensajes():
     try:
         with open(MENSAJES_FILE, "r", encoding="utf-8") as f:
@@ -145,7 +141,7 @@ def cargar_mensajes():
         print(f"⚠️ Error al cargar mensajes: {e}")
         return ["Hola, ¿cómo estás?"]
 
-# Función para generar mensaje personalizado con OpenAI
+# Generar mensaje con OpenAI
 def generar_mensaje(nombre):
     mensaje_base = random.choice(mensajes)
 
@@ -161,7 +157,7 @@ def generar_mensaje(nombre):
     except:
         return mensaje_base
 
-# Función para enviar mensajes
+# Enviar mensajes
 def enviar_mensajes():
     global cliente, usuarios, usuarios_enviados
 
@@ -169,9 +165,12 @@ def enviar_mensajes():
         print("⚠️ No hay usuarios disponibles.")
         return
 
+    # Hacer que Instagram reconozca actividad en la cuenta
+    cliente.get_timeline_feed()
+
     for usuario in usuarios[:MENSAJES_POR_RONDA]:
         if usuario["id"] in usuarios_enviados:
-            print(f"⏭️ Ya se envió mensaje a {usuario['full_name']}. Saltando...")
+            print(f"⏭️ Ya se envió mensaje a {usuario['full_name']}.")
             continue
 
         nombre = usuario["full_name"]
@@ -185,14 +184,14 @@ def enviar_mensajes():
             print(f"⚠️ Error al enviar mensaje a {nombre}: {e}")
             time.sleep(300)
 
-        tiempo_espera = random.randint(300, 600)  
+        tiempo_espera = random.randint(300, 600)
         print(f"⏳ Esperando {tiempo_espera // 60} minutos...")
         time.sleep(tiempo_espera)
 
     usuarios = usuarios[MENSAJES_POR_RONDA:] + usuarios[:MENSAJES_POR_RONDA]
     time.sleep(TIEMPO_ENTRE_RONDAS)
 
-# Función para programar el envío de mensajes
+# Programar tareas
 def programar_tareas():
     while True:
         enviar_mensajes()
