@@ -10,12 +10,13 @@ import json
 app = Flask(__name__)
 app.secret_key = os.getenv("API_KEY")  # Clave para sesiones
 
-# Configuración del proxy (dejar en "" si no usas proxy)
+# Configuración de proxy (Si tienes uno, agrégalo aquí)
 PROXY = ""
 
 # Variables globales
 cliente = None
 usuarios = []
+mensajes = []
 usuarios_enviados = set()
 MENSAJES_POR_RONDA = 10  # Reducido para evitar bloqueos
 TIEMPO_ENTRE_MENSAJES = random.randint(300, 600)  # 5 a 10 minutos entre mensajes
@@ -77,20 +78,21 @@ def verificacion_2fa():
 # Ruta para inicio de sesión exitoso
 @app.route("/inicio_exitoso")
 def inicio_exitoso():
-    global cliente, usuarios
+    global cliente, usuarios, mensajes
 
     if not cliente:
         return "Error: No hay sesión activa en Instagram."
 
-    # Cargar usuarios desde data.json
-    usuarios = cargar_usuarios_desde_json(DATA_FILE)
+    # Cargar usuarios y mensajes
+    usuarios = cargar_usuarios()
+    mensajes = cargar_mensajes()
 
-    if not usuarios:
-        return "No se pudieron cargar los usuarios desde data.json."
+    if not usuarios or not mensajes:
+        return "No se pudieron cargar los usuarios o mensajes."
 
-    print(f"✅ Se cargaron {len(usuarios)} usuarios.")
+    print(f"✅ Se cargaron {len(usuarios)} usuarios y {len(mensajes)} mensajes.")
 
-    # Iniciar el programador de mensajes en segundo plano
+    # Iniciar el programador de tareas en un hilo separado
     threading.Thread(target=programar_tareas, daemon=True).start()
 
     return "Inicio de sesión exitoso. El script está enviando mensajes."
@@ -125,26 +127,26 @@ def iniciar_sesion(username, password, codigo_2fa=None):
         print(f"⚠️ Error al iniciar sesión: {e}")
         return None
 
-# Función para cargar usuarios desde data.json
-def cargar_usuarios_desde_json(data_file):
+# Función para cargar usuarios dinámicamente desde `data.json`
+def cargar_usuarios():
     try:
-        with open(data_file, "r", encoding="utf-8") as f:
-            return json.load(f)
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return [json.loads(line) for line in f if line.strip()]
     except Exception as e:
-        print(f"⚠️ Error al cargar usuarios desde {data_file}: {e}")
+        print(f"⚠️ Error al cargar usuarios: {e}")
         return []
 
-# Función para cargar mensajes
+# Función para cargar mensajes dinámicamente desde `mensajes.txt`
 def cargar_mensajes():
     try:
         with open(MENSAJES_FILE, "r", encoding="utf-8") as f:
             return [line.strip() for line in f if line.strip()]
-    except:
-        return ["¡Hola! ¿Cómo estás?"]
+    except Exception as e:
+        print(f"⚠️ Error al cargar mensajes: {e}")
+        return ["Hola, ¿cómo estás?"]
 
-# Función para generar mensaje con OpenAI
+# Función para generar mensaje personalizado con OpenAI
 def generar_mensaje(nombre):
-    mensajes = cargar_mensajes()
     mensaje_base = random.choice(mensajes)
 
     prompt = f"Genera un mensaje para {nombre}: {mensaje_base}"
@@ -167,7 +169,7 @@ def enviar_mensajes():
         print("⚠️ No hay usuarios disponibles.")
         return
 
-    for usuario in usuarios[:MENSAJES_POR_RONDA]:  
+    for usuario in usuarios[:MENSAJES_POR_RONDA]:
         if usuario["id"] in usuarios_enviados:
             print(f"⏭️ Ya se envió mensaje a {usuario['full_name']}. Saltando...")
             continue
@@ -181,7 +183,7 @@ def enviar_mensajes():
             usuarios_enviados.add(usuario["id"])
         except Exception as e:
             print(f"⚠️ Error al enviar mensaje a {nombre}: {e}")
-            time.sleep(300)  
+            time.sleep(300)
 
         tiempo_espera = random.randint(300, 600)  
         print(f"⏳ Esperando {tiempo_espera // 60} minutos...")
