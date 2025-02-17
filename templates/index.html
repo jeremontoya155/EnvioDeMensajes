@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <title>Instagram Bot - Login</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
       * {
         margin: 0;
@@ -17,7 +21,7 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
-        background-color: #f5f5f5;
+        background-color: #d9e9e0;
       }
 
       .login-container {
@@ -28,17 +32,32 @@
         width: 100%;
         max-width: 600px;
         position: relative;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding-top: 60px;
+        height: 450px;
+      }
+
+      .avatar-wrapper {
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        height: 70px;
+        margin-bottom: 50px;
       }
 
       .avatar {
+        position: absolute;
+        left: 50%;
+        top: -50%;
+        transform: translateX(-50%);
         width: 60px;
         height: 60px;
         background-color: #78c2ad;
         border-radius: 50%;
-        margin: 0 auto 20px;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
       .avatar::after {
@@ -50,32 +69,78 @@
         background-position: center;
       }
 
-      h1 {
-        text-align: center;
-        color: #262626;
-        margin-bottom: 30px;
-        font-size: 24px;
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
       }
 
-      .form-group {
+      .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        padding-left: 40px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        color: #333;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #78c2ad;
+        box-shadow: 0 0 0 3px rgba(120, 194, 173, 0.2);
+        background-color: rgba(255, 255, 255, 0.95);
+      }
+
+      .form-group i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+
+      .form-group input:focus + i {
+        color: #78c2ad;
+      }
+
+      .auth-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 20px;
       }
 
-      input[type='text'],
-      input[type='password'] {
-        width: 100%;
-        padding: 12px;
-        background-color: rgba(255, 255, 255, 0.9);
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
+      .remember-me {
+        display: flex;
+        align-items: center;
+        color: #666;
         font-size: 14px;
-        margin-bottom: 15px;
       }
 
-      input[type='text']:focus,
-      input[type='password']:focus {
-        outline: none;
-        border-color: #78c2ad;
+      .remember-me input[type='checkbox'] {
+        margin-right: 8px;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        border: 2px solid #78c2ad;
+      }
+
+      .remember-me label {
+        cursor: pointer;
+      }
+
+      .forgot-password a {
+        color: #666;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s ease;
+      }
+
+      .forgot-password a:hover {
+        color: #1a237e;
       }
 
       .file-input-container {
@@ -83,91 +148,127 @@
       }
 
       .file-input-label {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         background: rgba(255, 255, 255, 0.9);
-        padding: 10px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
         margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .file-input-label:hover {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-color: #78c2ad;
+      }
+
+      .file-input-label span {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .file-input-label input[type='file'] {
+        position: absolute;
+        left: -9999px;
+      }
+
+      .file-input-label i {
+        font-size: 18px;
+        color: #78c2ad;
+      }
+
+      .file-name {
+        margin-left: auto;
+        font-size: 12px;
+        color: #888;
       }
 
       button {
         width: 100%;
-        padding: 12px;
+        padding: 14px;
         background: #1a237e;
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         text-transform: uppercase;
         letter-spacing: 1px;
+        transition: all 0.3s ease;
+        position: relative;
       }
 
       button:hover {
         background: #283593;
       }
 
-      .footer {
-        position: absolute;
-        bottom: -50px;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-        color: #666;
-        font-size: 12px;
+      button:active {
+        transform: translateY(1px);
       }
 
-      .footer a {
-        color: #666;
-        text-decoration: none;
-        margin: 0 5px;
+      button.loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      button.loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        border-left-color: transparent;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       .alert {
-        padding: 12px;
+        padding: 12px 16px;
         margin-bottom: 20px;
-        border-radius: 8px;
+        border-radius: 12px;
         background-color: rgba(255, 255, 255, 0.9);
+        border: 2px solid transparent;
       }
 
-      .remember-me {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        color: #666;
-        font-size: 14px;
-      }
 
-      .remember-me input[type='checkbox'] {
-        margin-right: 8px;
-      }
-
-      .forgot-password {
-        text-align: right;
-        margin-bottom: 20px;
-      }
-
-      .forgot-password a {
-        color: #666;
-        text-decoration: none;
-        font-size: 14px;
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 20px;
+        }
       }
     </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   </head>
   <body>
     <div class="login-container">
-      <div class="avatar"></div>
+      <div class="avatar-wrapper">
+        <div class="avatar"></div>
+      </div>
 
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %} {% for category, message in messages %}
       <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %} {% endif %} {% endwith %}
 
-      <form method="POST" enctype="multipart/form-data">
+      <form method="POST" enctype="multipart/form-data" id="loginForm">
         <div class="form-group">
           <input
             type="text"
@@ -175,8 +276,9 @@
             placeholder="Ingrese correo electrónico"
             required
           />
+          <i class="fas fa-envelope"></i>
         </div>
-
+  
         <div class="form-group">
           <input
             type="password"
@@ -184,50 +286,70 @@
             placeholder="Ingrese contraseña"
             required
           />
+          <i class="fas fa-lock"></i>
         </div>
-
-        <div class="remember-me">
-          <input type="checkbox" id="remember" name="remember" />
-          <label for="remember">Remember me</label>
+  
+        <div class="auth-options">
+          <div class="remember-me">
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember">Remember me</label>
+          </div>
+  
+          <div class="forgot-password">
+            <a href="#">Forgot password?</a>
+          </div>
         </div>
-
-        <div class="forgot-password">
-          <a href="#">Forgot password?</a>
-        </div>
-
+  
         <div class="file-input-container">
-          <div class="file-input-label">
+          <label class="file-input-label">
+            <i class="fas fa-file-alt"></i>
+            <span>Archivo de mensajes</span>
             <input
               type="file"
               name="mensajes_file"
               id="mensajes_file"
               accept=".txt"
             />
-          </div>
+            <span class="file-name" id="mensajes-filename">Ningún archivo seleccionado</span>
+          </label>
         </div>
-
+  
         <div class="file-input-container">
-          <div class="file-input-label">
-            <input type="file" name="data_file" id="data_file" accept=".json" />
-          </div>
+          <label class="file-input-label">
+            <i class="fas fa-database"></i>
+            <span>Archivo de datos</span>
+            <input
+              type="file"
+              name="data_file"
+              id="data_file"
+              accept=".json"
+            />
+            <span class="file-name" id="data-filename">Ningún archivo seleccionado</span>
+          </label>
         </div>
-
-        <button type="submit">LOGIN</button>
+  
+        <button type="submit" id="submitBtn">LOGIN</button>
       </form>
+  
+      <script>
+        // Manejo de nombres de archivo
+        document.getElementById('mensajes_file').addEventListener('change', function(e) {
+          const filename = e.target.files[0] ? e.target.files[0].name : 'Ningún archivo seleccionado';
+          document.getElementById('mensajes-filename').textContent = filename;
+        });
+  
+        document.getElementById('data_file').addEventListener('change', function(e) {
+          const filename = e.target.files[0] ? e.target.files[0].name : 'Ningún archivo seleccionado';
+          document.getElementById('data-filename').textContent = filename;
+        });
+  
+        // Manejo del botón de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+          const button = document.getElementById('submitBtn');
+          button.classList.add('loading');
+          button.textContent = '';
 
-      <!-- <div class="footer">
-        <div class="left">
-          <a href="#">Social Login</a>
-          <a href="#">About</a>
-          <a href="#">FAQ</a>
-        </div>
-        <div class="right">
-          <a href="#">Instagram</a>
-          <a href="#">LinkedIn</a>
-          <a href="#">Support</a>
-        </div>
-      </div>
-    </div> -->
-     
+      });
+    </script>
   </body>
 </html>
