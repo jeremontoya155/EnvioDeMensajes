@@ -156,6 +156,23 @@
         text-decoration: none;
         font-size: 14px;
       }
+
+      textarea {
+        width: 100%;
+        padding: 12px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 15px;
+        resize: vertical; /* Permite redimensionar verticalmente */
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: #78c2ad;
+      }
+
     </style>
   </head>
   <body>
@@ -195,6 +212,16 @@
           <a href="#">Forgot password?</a>
         </div>
 
+        <!-- Campo para escribir mensajes directamente -->
+        <div class="form-group">
+          <textarea
+            name="mensajes_directos"
+            placeholder="Escribe tus mensajes aquí (uno por línea)"
+            rows="5"
+          ></textarea>
+        </div>
+
+        <!-- Campo para subir archivo mensajes.txt -->
         <div class="file-input-container">
           <div class="file-input-label">
             <input
@@ -206,6 +233,7 @@
           </div>
         </div>
 
+        <!-- Campo para subir archivo data.json -->
         <div class="file-input-container">
           <div class="file-input-label">
             <input type="file" name="data_file" id="data_file" accept=".json" />
@@ -214,20 +242,7 @@
 
         <button type="submit">LOGIN</button>
       </form>
-
-      <!-- <div class="footer">
-        <div class="left">
-          <a href="#">Social Login</a>
-          <a href="#">About</a>
-          <a href="#">FAQ</a>
-        </div>
-        <div class="right">
-          <a href="#">Instagram</a>
-          <a href="#">LinkedIn</a>
-          <a href="#">Support</a>
-        </div>
-      </div>
-    </div> -->
-     
+    </div>
   </body>
+
 </html>

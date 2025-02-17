@@ -54,15 +54,27 @@ def index():
         session["username"] = username
         session["password"] = password
 
-        # Manejar la carga de archivos
-        if "mensajes_file" in request.files:
-            mensajes_file = request.files["mensajes_file"]
-            if mensajes_file.filename != "":
-                try:
-                    mensajes_file.save(MENSAJES_FILE)
-                    flash("Archivo de mensajes cargado correctamente.", "success")
-                except Exception as e:
-                    flash(f"Error al cargar el archivo de mensajes: {e}", "danger")
+        # Manejar la carga de archivos y mensajes directos
+        mensajes_directos = request.form.get("mensajes_directos", "").strip()
+
+        if mensajes_directos:
+            # Si el usuario escribió mensajes directamente, guardarlos en mensajes.txt
+            try:
+                with open(MENSAJES_FILE, "w", encoding="utf-8") as f:
+                    f.write(mensajes_directos)
+                flash("Mensajes guardados correctamente.", "success")
+            except Exception as e:
+                flash(f"Error al guardar los mensajes: {e}", "danger")
+        else:
+            # Si no escribió mensajes, usar el archivo mensajes.txt que suba
+            if "mensajes_file" in request.files:
+                mensajes_file = request.files["mensajes_file"]
+                if mensajes_file.filename != "":
+                    try:
+                        mensajes_file.save(MENSAJES_FILE)
+                        flash("Archivo de mensajes cargado correctamente.", "success")
+                    except Exception as e:
+                        flash(f"Error al cargar el archivo de mensajes: {e}", "danger")
 
         if "data_file" in request.files:
             data_file = request.files["data_file"]
@@ -77,12 +89,11 @@ def index():
         cliente = iniciar_sesion(username, password)
 
         if cliente:
-            return redirect(url_for("inicio_exitoso"))
+            return redirect(url_for("resumen"))  # Redirigir a /resumen
         else:
             return redirect(url_for("verificacion_2fa"))
 
     return render_template("index.html")
-
 @app.route("/resumen")
 def resumen():
     if "username" not in session:
