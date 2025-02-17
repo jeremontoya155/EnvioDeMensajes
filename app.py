@@ -83,6 +83,25 @@ def index():
 
     return render_template("index.html")
 
+@app.route("/resumen")
+def resumen():
+    if "username" not in session:
+        return redirect(url_for("index"))  # Redirigir si el usuario no ha iniciado sesión
+
+    username = session.get("username")
+
+    # Obtener el historial de acciones desde MongoDB
+    acciones = list(historial_collection.find({"username": username}).sort("fecha", -1))  # Ordenar por fecha descendente
+
+    # Calcular métricas
+    total_mensajes_enviados = len(acciones)
+    ultimos_mensajes = acciones[:10]  # Últimos 10 mensajes enviados
+
+    return render_template("resumen.html", 
+                           username=username, 
+                           total_mensajes_enviados=total_mensajes_enviados, 
+                           ultimos_mensajes=ultimos_mensajes)
+
 # Ruta para verificación de 2FA
 @app.route("/verificacion_2fa", methods=["GET", "POST"])
 def verificacion_2fa():
@@ -117,7 +136,8 @@ def inicio_exitoso():
     # Iniciar el programador de tareas en un hilo separado
     threading.Thread(target=programar_tareas, args=(username,), daemon=True).start()
 
-    return f"Inicio de sesión exitoso como {username}. El script está en ejecución y enviando mensajes."
+    return redirect(url_for("resumen"))
+
 
 # Función para cargar usuarios desde data.json
 def cargar_usuarios_desde_json(data_file):

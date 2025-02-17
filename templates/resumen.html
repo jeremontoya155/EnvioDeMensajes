@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Progreso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resumen de Progreso - {{ username }}</h1>
+    <p>Total de mensajes enviados: <strong>{{ total_mensajes_enviados }}</strong></p>
+
+    <h2>Últimos 10 mensajes enviados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Destinatario</th>
+                <th>Mensaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mensaje in ultimos_mensajes %}
+            <tr>
+                <td>{{ mensaje.fecha }}</td>
+                <td>{{ mensaje.destinatario }}</td>
+                <td>{{ mensaje.mensaje }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="/inicio_exitoso">Volver al inicio</a>
+</body>
+</html>
