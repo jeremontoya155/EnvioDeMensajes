@@ -14,17 +14,17 @@ app = Flask(__name__)
 app.secret_key = os.getenv("API_KEY")  # Necesaria para manejar sesiones
 
 # Configuración de Redis
-REDIS_URL = "redis://default:xypGfvtzsxoIUBvTxEeEbeXNhZhFOheg@viaduct.proxy.rlwy.net:56911"
+REDIS_URL = os.getenv("REDIS")
 redis_client = redis.from_url(REDIS_URL)  # Conexión a Redis
 
 # Configuración de MongoDB
-MONGO_URL = "mongodb://mongo:lQZVSODFgPGsceBNsiqMULsokyBTpvUx@junction.proxy.rlwy.net:42830"  # Reemplaza con tu URL de MongoDB
+MONGO_URL = os.getenv("MONGO")  # Reemplaza con tu URL de MongoDB
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client["instagram_bot"]  # Nombre de la base de datos
 historial_collection = db["historial_acciones"]  # Colección para el historial
 
 # Configuración del proxy SOCKS5
-PROXY = ""
+PROXY = os.getenv("PROXY")  # Proxy SOCKS5 para instagrapi
 
 # Variables globales
 usuarios = []
