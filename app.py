@@ -24,7 +24,7 @@ db = mongo_client["instagram_bot"]  # Nombre de la base de datos
 historial_collection = db["historial_acciones"]  # Colección para el historial
 
 # Configuración del proxy SOCKS5
-PROXY = os.getenv("PROXY")  # Proxy SOCKS5 para instagrapi
+# PROXY = " "  # Proxy SOCKS5 para instagrapi
 
 # Variables globales
 usuarios = []
@@ -132,7 +132,7 @@ def cargar_usuarios_desde_json(data_file):
 # Función para iniciar sesión en Instagram
 def iniciar_sesion(username, password, codigo_2fa=None):
     cl = Client()
-    cl.set_proxy(PROXY)
+    # cl.set_proxy(PROXY)  # Configurar el proxy
 
     # Clave única para la sesión en Redis
     session_key = f"instagram_session:{username}"
@@ -262,7 +262,7 @@ def enviar_mensajes(username):
             session_data = redis_client.get(session_key)
             if session_data:
                 cl = Client()
-                cl.set_proxy(PROXY)
+                # cl.set_proxy(PROXY)
                 session_dict = json.loads(session_data.decode("utf-8"))
                 # Guardar la sesión en un archivo temporal
                 with open("temp_session.json", "w") as f:
