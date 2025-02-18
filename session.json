@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "uuids": {
         "phone_id": "709e2908-5586-4c5e-a5c2-f5b7a54c4c53",
@@ -35,3 +36,5 @@
     "locale": "en_US",
     "timezone_offset": -14400
 }
+=======
+>>>>>>> 9091c0c6144e76be7ac8c015e3e4e39b95850124
