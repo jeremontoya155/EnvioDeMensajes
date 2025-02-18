@@ -227,7 +227,7 @@ def iniciar_sesion(username, password, codigo_2fa=None):
 
     # Cargar la sesión desde Redis si existe
     session_data = redis_client.get(session_key)
-    if session_data:
+    if (session_data):
         try:
             # Convertir los datos de Redis (bytes) a un diccionario
             session_dict = json.loads(session_data.decode("utf-8"))
@@ -438,6 +438,9 @@ def enviar_mensajes(username):
                         active_chats[usuario["id"]] = []
                     active_chats[usuario["id"]].append(message_id)  # Agregar el ID a la lista del usuario
 
+                    # Iniciar el monitoreo en un hilo separado
+                    threading.Thread(target=track_and_monitor_message, args=(username, usuario["id"], message_id), daemon=True).start()
+
         except Exception as e:
             print(f"⚠️ Error al enviar mensaje a {nombre}: {e}")
             time.sleep(300)  # Esperar 5 minutos antes de continuar
@@ -455,8 +458,8 @@ def enviar_mensajes(username):
     time.sleep(TIEMPO_ENTRE_RONDAS)
 
 # Iniciar el monitoreo en segundo plano
-monitor_thread = threading.Thread(target=track_and_monitor_message, daemon=True)
-monitor_thread.start()
+# monitor_thread = threading.Thread(target=track_and_monitor_message, daemon=True)
+# monitor_thread.start()
 
 # Función para programar tareas
 def programar_tareas(username):
