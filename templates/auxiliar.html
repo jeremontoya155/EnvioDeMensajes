@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtrar Seguidores</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, button { margin: 10px; padding: 10px; width: 80%; max-width: 400px; }
+        #status, #progress, #download { margin-top: 20px; font-size: 18px; }
+        #download { display: none; padding: 10px; background: green; color: white; border: none; cursor: pointer; }
+    </style>
+    <script>
+        function updateProgress() {
+            fetch("/progress")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("status").innerText = "Estado: " + data.status;
+                    document.getElementById("progress").innerText = "Progreso: " + data.progress + " / " + data.total;
+
+                    if (data.status !== "Finalizado.") {
+                        setTimeout(updateProgress, 5000);
+                    } else {
+                        document.getElementById("download").style.display = "block";
+                    }
+                });
+        }
+
+        function reiniciarSesion() {
+            fetch("/relog_instagram")
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                });
+        }
+    </script>
+</head>
+<body onload="updateProgress()">
+    <h1>Filtrar Seguidores de Instagram</h1>
+    <button onclick="reiniciarSesion()">🔄 Reiniciar Sesión</button>
+    <button id="download" onclick="window.location.href='/download_filtrados'">Descargar JSON</button>
+</body>
+</html>
