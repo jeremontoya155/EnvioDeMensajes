@@ -1,17 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
-from instagrapi import Client
-import schedule
-import time
-import threading
-import openai
 import os
-import random
 import json
-import redis  # Importar Redis
-from pymongo import MongoClient  # Importar MongoDB
-import requests 
+import time
+import random
+import threading
+from flask import Flask, request, session, redirect, url_for, render_template, flash
+from pymongo import MongoClient
+import redis
+import openai
+from instagrapi import Client
 import datetime
-
 
 app = Flask(__name__)
 app.secret_key = os.getenv("API_KEY")  # Necesaria para manejar sesiones
@@ -19,14 +16,13 @@ app.secret_key = os.getenv("API_KEY")  # Necesaria para manejar sesiones
 # Configuración de Redis
 REDIS_URL = os.getenv("REDIS")
 redis_client = redis.from_url(REDIS_URL)  # Conexión a Redis
-api_key = os.getenv("API_KEY")  # Clave de la API de Instagram
 
 # Configuración de MongoDB
 MONGO_URL = os.getenv("MONGO")  # Reemplaza con tu URL de MongoDB
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client["instagram_bot"]  # Nombre de la base de datos
 historial_collection = db["historial_acciones"]  # Colección para el historial
-historial_mensajes = db["historial_mensajes_dm"]
+historial_mensajes = db["historial_mensajes_dm"]  # Colección para el historial de mensajes
 
 # Configuración del proxy SOCKS5
 # PROXY = " "  # Proxy SOCKS5 para instagrapi
@@ -43,9 +39,6 @@ TIEMPO_ENTRE_RONDAS = 3600  # 1 hora entre rondas de mensajes
 MENSAJES_FILE = "mensajes.txt"
 BASE_CONOCIMIENTO_FILE = "base_conocimiento.txt"
 DATA_FILE = "data.json"
-# defino una variable global para almacenar los chats activos
-active_chats = {}
-
 
 # Configuración de OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Clave desde .env
@@ -102,6 +95,7 @@ def index():
             return redirect(url_for("verificacion_2fa"))
 
     return render_template("index.html")
+
 @app.route("/resumen")
 def resumen():
     if "username" not in session:
@@ -191,10 +185,10 @@ def estadisticas():
     mensajes_por_fecha = {}
     for mensaje in mensajes:
         fecha = mensaje.get("fecha")
-        fecha = datetime.strptime(fecha, "%Y-%m-%d %H:%M:%S").date()
-        if fecha not in mensajes_por_fecha:
-            mensajes_por_fecha[fecha] = 0
-        mensajes_por_fecha[fecha] += 1
+        fecha_datetime = datetime.datetime.strptime(fecha, "%Y-%m-%d %H:%M:%S").date()
+        if fecha_datetime not in mensajes_por_fecha:
+            mensajes_por_fecha[fecha_datetime] = 0
+        mensajes_por_fecha[fecha_datetime] += 1
 
     # Renderizar plantilla HTML con las estadísticas
     return render_template("resumen.html", 
@@ -205,13 +199,11 @@ def estadisticas():
                            total_likes=total_likes,
                            mensajes_vistos=mensajes_vistos)
 
-
-
 # Función para cargar usuarios desde data.json
 def cargar_usuarios_desde_json(data_file):
     try:
         with open(data_file, "r", encoding="utf-8") as f:
-            usuarios = [json.loads(line) for line in f if line.strip()]
+            usuarios = json.load(f)
         return usuarios
     except Exception as e:
         print(f"⚠️ Error al cargar usuarios desde {data_file}: {e}")
@@ -227,7 +219,7 @@ def iniciar_sesion(username, password, codigo_2fa=None):
 
     # Cargar la sesión desde Redis si existe
     session_data = redis_client.get(session_key)
-    if (session_data):
+    if session_data:
         try:
             # Convertir los datos de Redis (bytes) a un diccionario
             session_dict = json.loads(session_data.decode("utf-8"))
@@ -326,57 +318,6 @@ def cargar_base_conocimiento():
         return ""
 
 # Función para enviar mensajes
-def track_and_monitor_message(username, user_id, message_id, delay=120):
-    api_url = f"https://graph.facebook.com/v17.0/{message_id}"
-    params = {"access_token": api_key}
-
-    try:
-        # Espera antes de realizar la consulta (evitar monitorear de forma constante)
-        print(f"⏳ Esperando {delay} segundos antes de monitorear el mensaje...")
-        time.sleep(delay)
-
-        response = requests.get(api_url, params=params)
-        if response.status_code == 200:
-            dm_data = response.json()
-
-            # Extraer los datos relevantes del mensaje
-            estado = dm_data.get("status", "Desconocido")  # Estado del mensaje (ej. entregado, leído, etc.)
-            likes_count = dm_data.get("likes_count", 0)  # Número de "likes"
-            respuesta = dm_data.get("text", "")  # Respuesta al mensaje (si existe)
-            visto = dm_data.get("is_seen", False)  # Si el mensaje fue visto o no
-
-            # Obtener la fecha de la respuesta (si aplica) o la fecha de la última actualización
-            fecha = time.strftime("%Y-%m-%d %H:%M:%S")
-
-            # Estructura para guardar o actualizar la información en MongoDB
-            mensaje_guardado = {
-                "username": username,
-                "message_id": message_id,
-                "user_id": user_id,
-                "estado": estado,
-                "likes_count": likes_count,
-                "respuesta": respuesta,
-                "visto": visto,
-                "fecha": fecha,
-                "fecha_respuesta": fecha  # Si no se tiene una fecha de respuesta específica, usar la fecha actual
-            }
-
-            # Actualizar el estado y la interacción en MongoDB
-            historial_mensajes.update_one(
-                {"message_id": message_id},  # Identificar el mensaje original
-                {"$set": mensaje_guardado},
-                upsert=True  # Si no existe, lo inserta; si ya existe, lo actualiza
-            )
-
-            print(f"✅ Mensaje {message_id} con estado, likes, respuesta y visto actualizado para el usuario {user_id} en MongoDB.")
-        else:
-            print(f"⚠️ Error al obtener el estado del mensaje {message_id}: {response.status_code}")
-
-    except Exception as e:
-        print(f"⚠️ Error al conectar con la API para trackear y monitorear el mensaje {message_id}: {e}")
-
-
-# Función para enviar los mensajes y realizar el seguimiento
 def enviar_mensajes(username):
     global usuarios, usuarios_enviados
 
@@ -392,6 +333,7 @@ def enviar_mensajes(username):
 
         nombre = usuario["full_name"]
         descripcion = usuario["bio"]
+
         mensaje = generar_mensaje_personalizado(nombre, descripcion)
 
         try:
@@ -400,28 +342,20 @@ def enviar_mensajes(username):
             session_data = redis_client.get(session_key)
             if session_data:
                 cl = Client()
+                # cl.set_proxy(PROXY)
                 session_dict = json.loads(session_data.decode("utf-8"))
-                
                 # Guardar la sesión en un archivo temporal
                 with open("temp_session.json", "w") as f:
                     json.dump(session_dict, f)
-                
                 # Cargar la sesión desde el archivo temporal
                 cl.load_settings("temp_session.json")
-
-                # Enviar mensaje y obtener response con message_id
                 response = cl.direct_send(mensaje, user_ids=[usuario["id"]])
-                
-                if response and "message_id" in response:
-                    message_id = response["message_id"]
-                else:
-                    message_id = None  # En caso de que no se devuelva el ID
-
+                message_id = response["message_id"] if response and "message_id" in response else None
                 print(f"✅ Mensaje enviado a {nombre}: {mensaje} (ID: {message_id})")
                 mensajes_enviados += 1
                 usuarios_enviados.add(usuario["id"])  # Registrar el usuario como enviado
 
-                # Registrar la acción en MongoDB (historial de mensajes)
+                # Registrar la acción en MongoDB
                 accion = {
                     "username": username,
                     "accion": "mensaje_enviado",
@@ -430,19 +364,15 @@ def enviar_mensajes(username):
                     "message_id": message_id,
                     "fecha": time.strftime("%Y-%m-%d %H:%M:%S")
                 }
-                historial_mensajes.insert_one(accion)
+                historial_collection.insert_one(accion)
 
-                # Si se obtuvo el ID del mensaje, agregarlo al diccionario correspondiente
+                # Iniciar el monitoreo en un hilo separado
                 if message_id:
-                    if usuario["id"] not in active_chats:
-                        active_chats[usuario["id"]] = []
-                    active_chats[usuario["id"]].append(message_id)  # Agregar el ID a la lista del usuario
-
-                    # Iniciar el monitoreo en un hilo separado
-                    threading.Thread(target=track_and_monitor_message, args=(username, usuario["id"], message_id), daemon=True).start()
+                    threading.Thread(target=track_and_monitor_message, args=(username, usuario["id"], response["thread_id"], message_id), daemon=True).start()
 
         except Exception as e:
             print(f"⚠️ Error al enviar mensaje a {nombre}: {e}")
+            # Si hay un error, esperar un tiempo antes de reintentar
             time.sleep(300)  # Esperar 5 minutos antes de continuar
 
         # Esperar un tiempo aleatorio entre mensajes
@@ -457,13 +387,57 @@ def enviar_mensajes(username):
     # Esperar antes de la próxima ronda
     time.sleep(TIEMPO_ENTRE_RONDAS)
 
-# Iniciar el monitoreo en segundo plano
-# monitor_thread = threading.Thread(target=track_and_monitor_message, daemon=True)
-# monitor_thread.start()
-
 # Función para programar tareas
 def programar_tareas(username):
     while True:
         enviar_mensajes(username)  # Ejecutar una ronda de mensajes
+
+# Función para trackear y monitorear mensajes
+def track_and_monitor_message(username, user_id, thread_id, message_id, delay=120):
+    try:
+        cl = Client()
+        session_key = f"instagram_session:{username}"
+        session_data = redis_client.get(session_key)
+        if session_data:
+            session_dict = json.loads(session_data.decode("utf-8"))
+            with open("temp_session.json", "w") as f:
+                json.dump(session_dict, f)
+            cl.load_settings("temp_session.json")
+
+        time.sleep(delay)  # Esperar un tiempo antes de verificar
+
+        thread_messages = cl.direct_messages(thread_id)
+        visto = False
+        respuesta = ""
+        likes_count = 0
+
+        for msg in thread_messages:
+            if str(msg.id) == str(message_id):
+                visto = msg.seen
+            if msg.user_id == user_id and msg.id != message_id:
+                respuesta = msg.text
+                likes_count = msg.likes_count
+
+        mensaje_guardado = {
+            "username": username,
+            "message_id": message_id,
+            "user_id": user_id,
+            "thread_id": thread_id,
+            "estado": "enviado",
+            "likes_count": likes_count,
+            "respuesta": respuesta,
+            "visto": visto,
+            "fecha": time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
+        historial_mensajes.update_one(
+            {"message_id": message_id},
+            {"$set": mensaje_guardado},
+            upsert=True
+        )
+
+    except Exception as e:
+        print(f"⚠️ Error al trackear el mensaje: {e}")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

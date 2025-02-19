@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contador de Mensajes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .contador {
+            font-size: 3em;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mensajes Enviados</h1>
+    <div class="contador" id="contador">0</div>
+
+    <script>
+        // Función para actualizar el contador
+        function actualizarContador() {
+            fetch("/obtener_contador")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("contador").textContent = data.contador;
+                });
+        }
+
+        // Actualizar el contador cada 5 segundos
+        setInterval(actualizarContador, 5000);
+
+        // Actualizar el contador al cargar la página
+        window.onload = actualizarContador;
+    </script>
+</body>
+</html>
