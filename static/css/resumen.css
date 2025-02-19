@@ -1,4 +1,3 @@
-
 html {
   width: 100%;
   overflow-x: hidden;
@@ -7,6 +6,7 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #121212;
   margin: 0;
+  margin-top: 40px;
   padding: 0;
   color: #e0e0e0;
   overflow-x: hidden;
@@ -141,7 +141,8 @@ header {
   0% {
     transform: translateX(-100%);
   }
-  50%, 100% {
+  50%,
+  100% {
     transform: translateX(100%);
   }
 }
@@ -190,154 +191,174 @@ header {
 }
 
 /* Añade delay a cada carta sucesiva */
-.metricCard:nth-child(1) { animation-delay: 0.1s; }
-.metricCard:nth-child(2) { animation-delay: 0.2s; }
-.metricCard:nth-child(3) { animation-delay: 0.3s; }
-.metricCard:nth-child(4) { animation-delay: 0.4s; }
+.metricCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.metricCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.metricCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.metricCard:nth-child(4) {
+  animation-delay: 0.4s;
+}
 
 .columnMetrics {
-width: 100%;
-background: rgba(29, 53, 87, 0.6);
-backdrop-filter: blur(12px);
--webkit-backdrop-filter: blur(12px);
-padding: 20px;
-border-radius: 20px;
-box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-margin-bottom: 20px;
-border: 1px solid rgba(255, 255, 255, 0.18);
-position: relative;
-overflow: hidden;
+  width: 100%;
+  background: rgba(29, 53, 87, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  overflow: hidden;
 }
 
 .columnMetrics::before {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background: linear-gradient(
-45deg,
-transparent 0%,
-rgba(255, 255, 255, 0.1) 50%,
-transparent 100%
-);
-transform: translateX(-100%);
-animation: shine 3s infinite;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: shine 3s infinite;
 }
 
 .columnMetricsContent {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 20px;
-width: 100%;
-max-width: 800px;
-margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .columnMetricsContent .metricCard {
-width: 100%;
-height: auto;
-min-height: 120px;
-background: rgba(76, 175, 145, 0.7);
-color: white;
-text-align: center;
-padding: 25px;
-border-radius: 20px;
-box-shadow: 0 8px 32px rgba(76, 175, 145, 0.2);
-backdrop-filter: blur(8px);
--webkit-backdrop-filter: blur(8px);
-border: 1px solid rgba(255, 255, 255, 0.2);
-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-position: relative;
-overflow: hidden;
+  width: 100%;
+  height: auto;
+  min-height: 120px;
+  background: rgba(76, 175, 145, 0.7);
+  color: white;
+  text-align: center;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(76, 175, 145, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .columnMetricsContent .metricCard::after {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background: linear-gradient(
-135deg,
-rgba(255, 255, 255, 0.1) 0%,
-rgba(255, 255, 255, 0.05) 50%,
-transparent 100%
-);
-opacity: 0;
-transition: opacity 0.3s ease;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .columnMetricsContent .metricCard h2 {
-font-size: 20px;
-margin-bottom: 15px;
-text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .columnMetricsContent .metricCard p {
-font-size: 24px;
-margin: 0;
-opacity: 0.9;
-transform: translateY(0);
-transition: all 0.3s ease;
+  font-size: 24px;
+  margin: 0;
+  opacity: 0.9;
+  transform: translateY(0);
+  transition: all 0.3s ease;
 }
 
 /* Hover effects */
 .columnMetricsContent .metricCard:hover {
-transform: translateX(10px) scale(1.02);
-box-shadow: 0 12px 40px rgba(76, 175, 145, 0.3);
-background: rgba(76, 175, 145, 0.8);
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(76, 175, 145, 0.3);
+  background: rgba(76, 175, 145, 0.8);
 }
 
 .columnMetricsContent .metricCard:hover::after {
-opacity: 1;
+  opacity: 1;
 }
 
 .columnMetricsContent .metricCard:hover p {
-transform: translateY(-2px);
-opacity: 1;
+  transform: translateY(-2px);
+  opacity: 1;
 }
 
 /* Animación de entrada */
 @keyframes slideInFromLeft {
-from {
-opacity: 0;
-transform: translateX(-50px);
-}
-to {
-opacity: 1;
-transform: translateX(0);
-}
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .columnMetricsContent .metricCard {
-animation: slideInFromLeft 0.6s ease-out forwards;
+  animation: slideInFromLeft 0.6s ease-out forwards;
 }
 
 /* Delay para cada carta */
-.columnMetricsContent .metricCard:nth-child(1) { animation-delay: 0.1s; }
-.columnMetricsContent .metricCard:nth-child(2) { animation-delay: 0.2s; }
-.columnMetricsContent .metricCard:nth-child(3) { animation-delay: 0.3s; }
-.columnMetricsContent .metricCard:nth-child(4) { animation-delay: 0.4s; }
-.columnMetricsContent .metricCard:nth-child(5) { animation-delay: 0.5s; }
-.columnMetricsContent .metricCard:nth-child(6) { animation-delay: 0.6s; }
+.columnMetricsContent .metricCard:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.columnMetricsContent .metricCard:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.columnMetricsContent .metricCard:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.columnMetricsContent .metricCard:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.columnMetricsContent .metricCard:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.columnMetricsContent .metricCard:nth-child(6) {
+  animation-delay: 0.6s;
+}
 
 /* Media queries para responsividad */
 @media (max-width: 768px) {
-.columnMetricsContent .metricCard {
-padding: 15px;
-}
+  .columnMetricsContent .metricCard {
+    padding: 15px;
+  }
 
-.columnMetricsContent .metricCard h2 {
-font-size: 18px;
-}
+  .columnMetricsContent .metricCard h2 {
+    font-size: 18px;
+  }
 
-.columnMetricsContent .metricCard p {
-font-size: 20px;
-}
+  .columnMetricsContent .metricCard p {
+    font-size: 20px;
+  }
 }
 
 .metrics {
@@ -372,14 +393,14 @@ font-size: 20px;
   box-shadow: 0 0 15px rgba(76, 175, 145, 0.7);
 }
 
-.evolutionSection{
-  display:flex;
-  align-items:center;
+.evolutionSection {
+  display: flex;
+  align-items: center;
   flex-flow: column wrap;
 }
 .evolution {
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   justify-content: center;
   flex-flow: column wrap;
   width: 100%;

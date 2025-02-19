@@ -1,8 +1,17 @@
 <nav class="navbar">
-    <h1>Hunter</h1>
-    <button id="menu-toggle" class="menu-toggle">☰</button>
-    <ul>
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <a href="#" class="logo">Hunter</a>
+      <ul class="nav-links">
         <li><a href="{{ url_for('index') }}">Inicio</a></li>
         <li><a href="{{ url_for('resumen') }}">Resumen</a></li>
-    </ul>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>
+    <button class="menu-toggle">
+      <span>opcion I</span>
+      <span>opcion II</span>
+      <span>opcion III</span>
+    </button>
+  </div>
 </nav>
