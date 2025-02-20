@@ -11,102 +11,110 @@
 
   </head>
   <body>
-    
-    <header>
-      <h1>Dashboard de Progreso - {{ username }}</h1>
-    </header>
     {% include 'partials/navbar.html' %}
-    <div class="dashboard-container">
+    <div class="contenedorBody">
+
       
-      <!-- Métricas principales -->
-      <section class="titleMetrics">
-        <div class="titleMetricsContent">
-          <div class="metricCard">
-            <h2>Total de Mensajes Enviados</h2>
-            <p id="totalMensajes">{{ total_mensajes_enviados }}</p>
-          </div>
-          <div class="metricCard">
-            <h2>Último Mensaje</h2>
-            <p id="ultimoMensaje">{{ ultimos_mensajes[0].mensaje }}</p>
-          </div>
-          <div class="metricCard">
-            <h2>Fecha del Último Mensaje</h2>
-            <p id="fechaUltimoMensaje">{{ ultimos_mensajes[0].fecha }}</p>
-          </div>
-          <div class="metricCard">
-            <h2>Destinatario del Último Mensaje</h2>
-            <p id="destinatarioUltimo">
-              {{ ultimos_mensajes[0].destinatario }}
-            </p>
-          </div>
-        </div>
-      </section>
+      <header>
+        <h1>Dashboard - {{ username }}</h1>
+      </header>
+      <div class="dashboard-container">
+        
+        <!-- Métricas principales -->
+        <section class="titleMetrics">
+          <div class="titleMetricsContent">
+            <div class="rowTitle">
 
-      <div class="row">
-        <section class="columnMetrics">
-          <div class="columnMetricsContent">
+              <div class="metricCard">
+                <h2>Total de Mensajes Enviados</h2>
+                <p id="totalMensajes">{{ total_mensajes_enviados }}</p>
+              </div>
+              <div class="metricCard">
+                <h2>Fecha del Último Mensaje</h2>
+                <p id="fechaUltimoMensaje">{{ ultimos_mensajes[0].fecha }}</p>
+              </div>
+              <div class="metricCard">
+                <h2>Destinatario del Último Mensaje</h2>
+                <p id="destinatarioUltimo">
+                  {{ ultimos_mensajes[0].destinatario }}
+                </p>
+              </div>
+            </div>
+            <div class="MetricUltimoMensaje">
 
-            <div class="metricCard">
-              <h2>Total de Mensajes por Usuario</h2>
-              <p id="totalMensajesPorUsuario"></p>
-            </div>
-            <div class="metricCard">
-              <h2>Fecha del Primer Mensaje</h2>
-              <p id="fechaPrimerMensaje"></p>
-            </div>
-            <div class="metricCard">
-              <h2>Promedio de Likes por Mensaje</h2>
-              <p id="promedioLikesPorMensaje"></p>
-            </div>
-            <div class="metricCard">
-              <h2>Usuario con Más Mensajes</h2>
-              <p id="usuarioMasMensajes"></p>
-            </div>
-            <div class="metricCard">
-              <h2>Usuario con Más Likes</h2>
-              <p id="usuarioMasLikes"></p>
-            </div>
-            <div class="metricCard">
-              <h2>Día con Más Mensajes Enviados</h2>
-              <p id="diaMasMensajes"></p>
+              <div class="metricCard">
+                <h2>Último Mensaje</h2>
+                <p id="ultimoMensaje">{{ ultimos_mensajes[0].mensaje }}</p>
+              </div>
             </div>
           </div>
         </section>
-
-        <div class="column">
-          <section class="evolution">
-            <div class="evolutionSection">
-                <h2>Evolución de Mensajes Enviados</h2>
-                <div class="chart-container">
-                  <canvas id="mensajesEnviados-chart"></canvas>
-                </div>
-            </div>
-
-            <div class="evolutionSection">
-                <h2>Distribución por Destinatarios</h2>
-                <div class="chart-container">
-                  <canvas id="destinatarios-chart"></canvas>
-                </div>
-            </div>
-            <div class="evolutionSection">
-
-                <h2>Distribución de Me Gustas</h2>
-                <div class="chart-container">
-                <canvas id="meGustas-chart"></canvas>
+  
+        <div class="row">
+          <section class="columnMetrics">
+            <div class="columnMetricsContent">
+  
+              <div class="metricCard">
+                <h2>Total de Mensajes por Usuario</h2>
+                <p id="totalMensajesPorUsuario"></p>
+              </div>
+              <div class="metricCard">
+                <h2>Fecha del Primer Mensaje</h2>
+                <p id="fechaPrimerMensaje"></p>
+              </div>
+              <div class="metricCard">
+                <h2>Promedio de Likes por Mensaje</h2>
+                <p id="promedioLikesPorMensaje"></p>
+              </div>
+              <div class="metricCard">
+                <h2>Usuario con Más Mensajes</h2>
+                <p id="usuarioMasMensajes"></p>
+              </div>
+              <div class="metricCard">
+                <h2>Usuario con Más Likes</h2>
+                <p id="usuarioMasLikes"></p>
+              </div>
+              <div class="metricCard">
+                <h2>Día con Más Mensajes Enviados</h2>
+                <p id="diaMasMensajes"></p>
+              </div>
             </div>
           </section>
-        </div>
-
-          <!-- Sección de me gustas por mensaje -->
-          
-        </div>
-        <div class="row">
+  
+          <div class="column">
+            <section class="evolution">
+              <div class="evolutionSection">
+                  <h2>Evolución de Mensajes Enviados</h2>
+                  <div class="chart-container">
+                    <canvas id="mensajesEnviados-chart"></canvas>
+                  </div>
+              </div>
+              <div class="evolutionSection">
+                  <h2>Distribución por Destinatarios</h2>
+                  <div class="chart-container">
+                    <canvas id="destinatarios-chart"></canvas>
+                  </div>
+              </div>
+              <div class="evolutionSection">
+                  <h2>Distribución de Me Gustas</h2>
+                  <div class="chart-container">
+                  <canvas id="meGustas-chart"></canvas>
+              </div>
+            </section>
             <section class="likes-section">
-                <h2>Me Gustas por Mensaje</h2>
-                <div id="likesContainer"></div>
-              </section>
+              <h2>Me Gustas por Mensaje</h2>
+              <div id="likesContainer"></div>
+            </section>
+          </div>
         </div>
-        <!-- Evolución de mensajes enviados en el tiempo -->
+          <div class="rowMensajes">
+              <section class="mensajes-section">
+                  <h2>Mensajes Enviados</h2>
+                  <div id="mensajesSend"></div>
+                </section>
+          </div>
+          <!-- Evolución de mensajes enviados en el tiempo -->
+        
       </div>
     </div>
 

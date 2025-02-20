@@ -8,12 +8,14 @@
 }
 
 body {
+  margin-top: 40px;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   background-color: #d9e9e0;
+  width:100%;
 }
 
 .login-container {
