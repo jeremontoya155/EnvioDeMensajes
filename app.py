@@ -22,7 +22,7 @@ MONGO_URL = os.getenv("MONGO")  # Reemplaza con tu URL de MongoDB
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client["instagram_bot"]  # Nombre de la base de datos
 historial_collection = db["historial_acciones"]  # Colección para el historial
-historial_mensajes = db["historial_mensajes_dm"]  # Colección para el historial de mensajes
+historial_mensajes = db["historial_mensajes"]  # Colección para el historial de mensajes
 
 # Configuración del proxy SOCKS5
 # PROXY = " "  # Proxy SOCKS5 para instagrapi
