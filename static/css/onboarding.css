@@ -1,0 +1,90 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  background-color: #252525; /* Fondo oscuro como en tu sidebar */
+  color: #fff; /* Texto blanco para contraste */
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center; /* Centrado */
+  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra similar al sidebar expandido */
+}
+
+.header {
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #4caf91; /* Verde del togglebtn */
+}
+
+.content {
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  color: #ffc552; /* Amarillo del togglebtn */
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.section ol,
+.section ul {
+  padding-left: 20px;
+}
+
+.section li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.footer {
+  margin-top: 30px;
+}
+
+.footer h2 {
+  font-size: 1.5rem;
+  color: #4caf91; /* Verde del togglebtn */
+}
+
+.footer p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .section h2 {
+    font-size: 1.2rem;
+  }
+
+  .section li {
+    font-size: 0.9rem;
+  }
+}

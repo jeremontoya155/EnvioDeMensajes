@@ -1,32 +1,30 @@
 <div class="sidebar collapsed" id="mySidebar">
   <span class="togglebtn" onclick="toggleNav()">
-      <i class="fas fa-bars" id="toggle"></i>
+    <i class="fas fa-bars" id="toggle"></i>
   </span>
-  
+
   <div class="sidebar-container">
-      <div class="logo-container">
-          <img src="/static/images/logo.png" alt="Logo" class="logo-small">
-          <img src="/static/images/Hunter.png" alt="Hunter" class="logo-large">
+    <div class="logo-container">
+      <img src="/static/images/logo.png" alt="Logo" class="logo-small" />
+      <img src="/static/images/Hunter.png" alt="Hunter" class="logo-large" />
+    </div>
+
+    <div class="menu">
+      <div class="nav-links">
+        <a href="{{ url_for('index') }}">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="{{ url_for('resumen') }}">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Resumen</span>
+        </a>
+        <a href="{{ url_for('onboarding') }}">
+          <i class="fas fa-info-circle"></i>
+          <span>On Boarding</span>
+        </a>
       </div>
-      
-      <div class="menu">
-          <div class="nav-links">
-              <a href="{{ url_for('index') }}">
-                  <i class="fas fa-home"></i>
-                  <span>Home</span>
-              </a>
-              <a href="{{ url_for('resumen') }}">
-                  <i class="fas fa-info-circle"></i>
-                  <span>Resumen</span>
-              </a>
-              <a href="{{ url_for('index') }}">
-                <i class="fas fa-info-circle"></i>
-                <span>On Boarding</span>
-              </a>
-          </div>
-      </div>
+    </div>
   </div>
 </div>
-<script>
-  
-</script>
+<script></script>

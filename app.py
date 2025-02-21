@@ -41,7 +41,9 @@ DATA_FILE = "data.json"
 
 # Configuración de OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Clave desde .env
-
+@app.route("/onboarding", methods=["GET"])
+def onboarding():
+    return render_template("onboarding.html")
 # Ruta principal: formulario para ingresar credenciales
 @app.route("/", methods=["GET", "POST"])
 def index():
