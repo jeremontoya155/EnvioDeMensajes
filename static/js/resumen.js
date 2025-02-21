@@ -1,4 +1,3 @@
-
 // Supongamos que estos son tus datos reales
 const mensajes = [
   {
@@ -96,12 +95,10 @@ document.getElementById('totalMensajesPorUsuario').innerHTML =
 const fechaPrimerMensaje = mensajes.sort(
   (a, b) => new Date(a.fecha) - new Date(b.fecha)
 )[0].fecha;
-document.getElementById('fechaPrimerMensaje').textContent =
-  fechaPrimerMensaje;
+document.getElementById('fechaPrimerMensaje').textContent = fechaPrimerMensaje;
 
 const promedioLikes =
-  mensajes.reduce((sum, mensaje) => sum + mensaje.likes, 0) /
-  mensajes.length;
+  mensajes.reduce((sum, mensaje) => sum + mensaje.likes, 0) / mensajes.length;
 document.getElementById('promedioLikesPorMensaje').textContent =
   promedioLikes.toFixed(2);
 const usuarioMasMensajes = Object.entries(mensajesPorUsuario).reduce(
@@ -114,8 +111,7 @@ document.getElementById(
   'usuarioMasMensajes'
 ).textContent = `${usuarioMasMensajes.usuario} (${usuarioMasMensajes.total} mensajes)`;
 const likesPorUsuario = mensajes.reduce((acc, mensaje) => {
-  acc[mensaje.destinatario] =
-    (acc[mensaje.destinatario] || 0) + mensaje.likes;
+  acc[mensaje.destinatario] = (acc[mensaje.destinatario] || 0) + mensaje.likes;
   return acc;
 }, {});
 
@@ -146,9 +142,7 @@ document.getElementById(
 ).textContent = `${diaMasMensajes.fecha} (${diaMasMensajes.total} mensajes)`;
 
 // 2. Crear gráfico de evolución de mensajes enviados
-const ctx1 = document
-  .getElementById('mensajesEnviados-chart')
-  .getContext('2d');
+const ctx1 = document.getElementById('mensajesEnviados-chart').getContext('2d');
 new Chart(ctx1, {
   type: 'line',
   data: {
@@ -177,9 +171,7 @@ mensajes.forEach((mensaje) => {
 const destinatarios = Object.keys(mensajesPorDestinatario);
 const cantidadPorDestinatario = Object.values(mensajesPorDestinatario);
 
-const ctx2 = document
-  .getElementById('destinatarios-chart')
-  .getContext('2d');
+const ctx2 = document.getElementById('destinatarios-chart').getContext('2d');
 new Chart(ctx2, {
   type: 'bar',
   data: {

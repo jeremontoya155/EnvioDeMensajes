@@ -2,7 +2,7 @@
  * RESET & BASE STYLES
  * =====================================
  */
- html {
+html {
   width: 100%;
   overflow-x: hidden;
 }
@@ -56,7 +56,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;  
+  width: 100%;
 }
 
 .rowMensajes {
@@ -436,7 +436,7 @@ canvas:hover {
     transparent 100%
   );
   transform: translateX(-100%);
-  animation: shine 3s infinite;
+  animation: shine 6s infinite;
 }
 
 .mensajes-section:hover {
@@ -461,7 +461,8 @@ canvas:hover {
   0% {
     transform: translateX(-100%);
   }
-  50%, 100% {
+  50%,
+  100% {
     transform: translateX(100%);
   }
 }
@@ -572,6 +573,11 @@ canvas:hover {
  * RESPONSIVE STYLES
  * =====================================
  */
+@media (max-width: 500px) {
+  .contenedorBody {
+    width: 80%;
+  }
+}
 @media (max-width: 768px) {
   .columnMetricsContent .metricCard {
     padding: 15px;
@@ -583,5 +589,122 @@ canvas:hover {
 
   .columnMetricsContent .metricCard p {
     font-size: 20px;
+  }
+}
+
+/* 
+ * RESPONSIVE STYLES
+ * =====================================
+ */
+
+/* Celulares */
+@media (max-width: 768px) {
+  .contenedorBody {
+    margin-left: 69px;
+  }
+  .columnMetrics {
+    max-width: none;
+  }
+
+  header {
+    font-size: 1.5rem;
+    padding: 1rem;
+  }
+  .rowTitle {
+    flex-flow: column wrap;
+  }
+  .row,
+  .rowMensajes {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .column {
+    width: 100%;
+    height: auto;
+  }
+
+  .metricCard {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+
+  .metricCard h2 {
+    font-size: 18px;
+  }
+
+  .metricCard p {
+    font-size: 16px;
+  }
+
+  .titleMetricsContent {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .MetricUltimoMensaje {
+    width: 100%;
+  }
+
+  .MetricUltimoMensaje .metricCard {
+    height: auto;
+  }
+
+  .chart-container canvas {
+    height: 200px;
+  }
+}
+
+/* iPad Mini */
+@media (min-width: 769px) and (max-width: 834px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .column {
+    width: 50%;
+  }
+
+  .metricCard {
+    width: 200px;
+    height: 220px;
+  }
+
+  .metricCard h2 {
+    font-size: 20px;
+  }
+
+  .metricCard p {
+    font-size: 18px;
+  }
+
+  .chart-container canvas {
+    height: 250px;
+  }
+}
+
+/* iPad Air y Desktops */
+@media (min-width: 835px) {
+  .contenedorBody {
+    width: 90%;
+    margin-left: 120px;
+  }
+
+  .metricCard {
+    width: 250px;
+    height: 250px;
+  }
+
+  .metricCard h2 {
+    font-size: 22px;
+  }
+
+  .metricCard p {
+    font-size: 20px;
+  }
+
+  .chart-container canvas {
+    height: 300px;
   }
 }

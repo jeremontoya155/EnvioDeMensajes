@@ -1,90 +1,176 @@
-/* Reset básico */
+/* 
+ * RESET & BASE STYLES
+ * =====================================
+ */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-  background-color: #252525; /* Fondo oscuro como en tu sidebar */
-  color: #fff; /* Texto blanco para contraste */
-  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #0d1117; /* Fondo oscuro profundo */
+  color: #e0e0e0; /* Texto claro */
+  overflow-y: auto;
 }
-
+.galaxy-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #121212, #0d1117);
+  z-index: -1;
+  overflow: hidden;
+  overflow-y: auto;
+}
 .container {
-  max-width: 800px;
+  width: calc(100% - 57px);
+  max-width: 1200px;
   margin: 0 auto;
-  text-align: center; /* Centrado */
-  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra similar al sidebar expandido */
+  margin-left: 57px;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  background: rgba(29, 53, 87, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  animation: fadeInUp 0.6s ease-out forwards;
 }
-
 .header {
+  text-align: center;
   margin-bottom: 30px;
 }
-
 .header h1 {
-  font-size: 2rem;
-  color: #4caf91; /* Verde del togglebtn */
-}
-
-.content {
-  padding: 20px;
-}
-
-.section {
-  margin-bottom: 30px;
-}
-
-.section h2 {
-  color: #ffc552; /* Amarillo del togglebtn */
   font-size: 1.5rem;
-  margin-bottom: 15px;
+  color: #4caf91; /* Verde galáctico */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-top: 10px;
 }
-
-.section ol,
-.section ul {
+.logo-main {
+  max-width: 300px;
+  width: 100%;
+  margin: 0 auto 20px;
+  display: block;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.section {
+  background: rgba(44, 62, 80, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+.section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(76, 175, 145, 0.5);
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.section-header h2 {
+  font-size: 1.5rem;
+  color: #ffc552; /* Amarillo galáctico */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.section-header .icon {
+  font-size: 1.5rem;
+  color: #4caf91;
+  animation: pulse 2s infinite;
+}
+.steps,
+.features {
+  list-style: none;
+  padding-left: 0;
+}
+.steps li,
+.features li {
+  position: relative;
   padding-left: 20px;
-}
-
-.section li {
   margin-bottom: 10px;
   font-size: 1rem;
+  color: #e0e0e0;
+  transition: all 0.3s ease;
 }
-
+.steps li::before,
+.features li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #4caf91;
+  font-size: 1.2rem;
+}
 .footer {
+  text-align: center;
   margin-top: 30px;
 }
-
 .footer h2 {
   font-size: 1.5rem;
-  color: #4caf91; /* Verde del togglebtn */
+  color: #4caf91;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
 .footer p {
   font-size: 1rem;
   margin-bottom: 10px;
+  color: #e0e0e0;
 }
-
+.logo-footer {
+  max-width: 80px;
+  width: 100%;
+  margin: 0 auto 20px;
+  display: block;
+}
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
+    grid-template-columns: 1fr;
     padding: 15px;
   }
-
-  .header h1 {
-    font-size: 1.5rem;
-  }
-
-  .section h2 {
+  .section-header h2 {
     font-size: 1.2rem;
   }
-
-  .section li {
+  .steps li,
+  .features li {
     font-size: 0.9rem;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justift-content: space-around;
+    flex-flow: column wrap;
+    overflow-y: auto;
   }
 }
