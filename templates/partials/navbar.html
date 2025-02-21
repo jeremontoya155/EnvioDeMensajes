@@ -1,17 +1,32 @@
-<nav class="navbar">
-  <div class="navbar-container">
-    <div class="navbar-left">
-      <a href="#" class="logo">Hunter</a>
-      <ul class="nav-links">
-        <li><a href="{{ url_for('index') }}">Inicio</a></li>
-        <li><a href="{{ url_for('resumen') }}">Resumen</a></li>
-        <li><a href="#">About</a></li>
-      </ul>
-    </div>
-    <button class="menu-toggle">
-      <span>opcion I</span>
-      <span>opcion II</span>
-      <span>opcion III</span>
-    </button>
+<div class="sidebar collapsed" id="mySidebar">
+  <span class="togglebtn" onclick="toggleNav()">
+      <i class="fas fa-bars" id="toggle"></i>
+  </span>
+  
+  <div class="sidebar-container">
+      <div class="logo-container">
+          <img src="/static/images/logo.png" alt="Logo" class="logo-small">
+          <img src="/static/images/Hunter.png" alt="Hunter" class="logo-large">
+      </div>
+      
+      <div class="menu">
+          <div class="nav-links">
+              <a href="{{ url_for('index') }}">
+                  <i class="fas fa-home"></i>
+                  <span>Home</span>
+              </a>
+              <a href="{{ url_for('resumen') }}">
+                  <i class="fas fa-info-circle"></i>
+                  <span>Resumen</span>
+              </a>
+              <a href="{{ url_for('index') }}">
+                <i class="fas fa-info-circle"></i>
+                <span>On Boarding</span>
+              </a>
+          </div>
+      </div>
   </div>
-</nav>
+</div>
+<script>
+  
+</script>
