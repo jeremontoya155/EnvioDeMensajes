@@ -31,8 +31,8 @@ usuarios = []
 usuarios_enviados = set()  # Conjunto para almacenar IDs de usuarios a los que se les ha enviado mensajes
 MENSAJES_POR_RONDA = 20  # Mensajes por ronda
 DURACION_HORAS = 6
-TIEMPO_ENTRE_MENSAJES = random.randint(200, 600)  # Entre 5 y 10 minutos entre mensajes
-TIEMPO_ENTRE_RONDAS = 3600  # 1 hora entre rondas de mensajes
+TIEMPO_ENTRE_MENSAJES = random.randint(60, 300)  # Entre 5 y 10 minutos entre mensajes
+TIEMPO_ENTRE_RONDAS = 900 # 15 minutos
 
 # Archivos de mensajes y base de conocimiento
 MENSAJES_FILE = "mensajes.txt"
